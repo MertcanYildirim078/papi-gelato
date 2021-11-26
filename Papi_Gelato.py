@@ -21,7 +21,7 @@
 
 #Bij een andere keuze dan A, C, M of V krijg je de tekst te zien: “Sorry dat snap ik niet...” en wordt deze stap herhaald.
 def welkom():
-    print('Welkom bij Papi Gelato je mag alle smaken kiezen zolang het maar vanille ijs is.')
+    print('Welkom bij Papi Gelato')
 
 def vraagbolletjes():
     while True:
