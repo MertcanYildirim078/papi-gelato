@@ -16,6 +16,10 @@
 #    B. bij N als als antwoord stopt het programma en krijg je de boodschap: “Bedankt en tot ziens!”
 #    C. anders krijg je de tekst te zien: “Sorry, dat snap ik niet...” en wordt deze stap herhaald
 # Let op: Programmeer zo DRY mogelijk en gebruik duidelijke beschrijvenende namen voor je functies en variabelen
+
+#a het kiezen van een aantal bolletjes komt voor ieder bolletje de vraag: “Welke smaak wilt u voor bolletje nummer {X}? A) Aardbei, C) Chocolade, M) Munt of V) Vanille?”
+
+#Bij een andere keuze dan A, C, M of V krijg je de tekst te zien: “Sorry dat snap ik niet...” en wordt deze stap herhaald.
 def welkom():
     print('Welkom bij Papi Gelato je mag alle smaken kiezen zolang het maar vanille ijs is.')
 
@@ -25,6 +29,7 @@ def vraagbolletjes():
         if bolletjes > 8 :
             print("Zulke grote bakken hebben we niet!")
         else:
+            print("Sorry dat snap ik niet...")
             return bolletjes
 
 def vraagbakje(bolletjes):
@@ -35,7 +40,7 @@ def vraagbakje(bolletjes):
         elif vraagbakjes.lower() == 'b':
             return 'Bakje'
         else:
-            print("Dit is geen geldige optie!")
+            print("Sorry dat snap ik niet...")
 
 def resultaat():
     while True:
@@ -45,7 +50,32 @@ def resultaat():
         elif verderbestellen.lower() == "n":
             return False
         else:
-            print("Sorry, dat snap ik niet...")
+             print("Sorry dat snap ik niet...")
+
+def smaken(bolletjes):
+        smaaken = ""
+        for x in range(bolletjes):
+            x += 1
+            while True:
+                smaak = input(f'Welke smaak wilt u voor bolletje nummer {x}? A) Aardbei, C) Chocolade, M) Munt of V) Vanille?: ')
+                if smaak.lower() == 'a':
+                    smaaken = smaaken + f"Bolletje {x}: Aarbei \n"
+                    break
+                elif smaak.lower() == 'c':
+                    smaaken = smaaken + f"Bolletje {x}: Chocolade \n"
+                    break
+                elif smaak.lower() == 'm':
+                    smaaken = smaaken + f"Bolletje {x}: Munt \n"
+                    break
+                elif smaak.lower() == 'v':
+                    smaaken = smaaken + f"Bolletje {x}: Vanille \n"
+                    break
+                else:
+                    print("Sorry dat snap ik niet...")
+        return smaaken
+                
+
+
 
 def sorry():
     print('Sorry, dat snap ik niet...')
@@ -59,11 +89,14 @@ def papi():
     while process:
         welkom()
         bolletjes = vraagbolletjes()
+        smaaken = smaken(bolletjes)
+        print (smaaken)
         if bolletjes  <= 3:
             HoornOfBakje = vraagbakje(bolletjes)
-            print(f"Hier is uw {HoornOfBakje}")
+            print(f"Hier is uw {HoornOfBakje} met {bolletjes} bolletjes met de smaken hier boven ^")
         elif bolletjes >= 4 and bolletjes <=8:
             print(f'Hier is uw bakje met {bolletjes} bolletje(s)')
+
 
  
         Doorgaan =resultaat()
