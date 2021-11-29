@@ -20,6 +20,9 @@
 #a het kiezen van een aantal bolletjes komt voor ieder bolletje de vraag: “Welke smaak wilt u voor bolletje nummer {X}? A) Aardbei, C) Chocolade, M) Munt of V) Vanille?”
 
 #Bij een andere keuze dan A, C, M of V krijg je de tekst te zien: “Sorry dat snap ik niet...” en wordt deze stap herhaald.
+#Bolletjes (ongeacht de smaak) zijn €1,10 per stuk
+# Horrentjes zijn €1,25 per stuk
+# Bakjes zijn €0,75 per stuk
 def welkom():
     print('Welkom bij Papi Gelato')
 
@@ -29,15 +32,21 @@ def vraagbolletjes():
         if bolletjes > 8 :
             print("Zulke grote bakken hebben we niet!")
         else:
-            print("Sorry dat snap ik niet...")
             return bolletjes
+            
 
+hoorntje = 0
+bakje = 0
 def vraagbakje(bolletjes):
     while True:
         vraagbakjes = input(f'Wilt u deze {bolletjes} bolletje(s) in A) een hoorntje of B) een bakje? ')
         if vraagbakjes.lower() == "a":
+            global hoorntje
+            hoorntje += 1
             return "Hoorntje"
         elif vraagbakjes.lower() == 'b':
+            global bakje
+            bakje += 1
             return 'Bakje'
         else:
             print("Sorry dat snap ik niet...")
@@ -59,7 +68,7 @@ def smaken(bolletjes):
             while True:
                 smaak = input(f'Welke smaak wilt u voor bolletje nummer {x}? A) Aardbei, C) Chocolade, M) Munt of V) Vanille?: ')
                 if smaak.lower() == 'a':
-                    smaaken = smaaken + f"Bolletje {x}: Aarbei \n"
+                    smaaken = smaaken + f"Bolletje {x}: Aardbei \n"
                     break
                 elif smaak.lower() == 'c':
                     smaaken = smaaken + f"Bolletje {x}: Chocolade \n"
@@ -73,15 +82,27 @@ def smaken(bolletjes):
                 else:
                     print("Sorry dat snap ik niet...")
         return smaaken
-                
+               
+def bonnetje(bolletjes, hoorntje, bakje):
+    if bolletjes in range(4,9):
+        bakje += 1 
+    bolletjesprijs = bolletjes * 1.10 
+    hoorentjeprijs = hoorntje * 1.25
+    bakjesprijs = bakje * 0.75
+    totaal = bolletjesprijs + hoorentjeprijs + bakjesprijs
+    print('--------------------papi gelato------------------------ \n'
+          '                                                        \n'
+         f'Bolletjes:     {bolletjes} x €1.10    = €{bolletjesprijs}\n'
+         f'Hoorntjes:     {hoorntje} x €1.25     = €{hoorentjeprijs}\n' 
+         f'Bakjes:        {bakje} x €0.75         = €{bakjesprijs}   \n'
+          '                                        --------------- +\n'
+         f'Totaal:                               = €{totaal}          ')                           
 
 
 
 def sorry():
     print('Sorry, dat snap ik niet...')
     return sorry()
-
-
 
 
 def papi():
@@ -93,12 +114,15 @@ def papi():
         print (smaaken)
         if bolletjes  <= 3:
             HoornOfBakje = vraagbakje(bolletjes)
-            print(f"Hier is uw {HoornOfBakje} met {bolletjes} bolletjes met de smaken hier boven ^")
+            print(f"Hier is uw {HoornOfBakje} met {bolletjes} bolletjes")
         elif bolletjes >= 4 and bolletjes <=8:
             print(f'Hier is uw bakje met {bolletjes} bolletje(s)')
 
+        if bolletjes <= 0:
+            print('Sorry u heeft geen bolletjes besteld')
+            return vraagbolletjes()
+        bonnetje(bolletjes, hoorntje, bakje)
 
- 
         Doorgaan =resultaat()
         if Doorgaan:
             process = True
@@ -106,6 +130,7 @@ def papi():
             process = False
             print('Bedankt en tot ziens!')
             return
+            
 
 papi()
 
