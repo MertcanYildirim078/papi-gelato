@@ -23,6 +23,22 @@
 #Bolletjes (ongeacht de smaak) zijn €1,10 per stuk
 # Horrentjes zijn €1,25 per stuk
 # Bakjes zijn €0,75 per stuk
+
+
+# “Wat voor topping wilt u: A) Geen, B) Slagroom, C) Sprinkels of D) Caramel Saus?”.
+
+# Iedere topping heeft zo zijn eigen prijs, maar alle toppings staan als 1 regel op het bonnetje.
+
+# Geen: geen extra kosten
+# Slagroom: €0,50 extra kosten
+# Sprinkels: voor ieder bolletje €0,30 extra kosten
+# Caramel Saus: als de bestelling in een horrentje zit dan €0,60 extra kosten, als het in een bakje zit dan €0,90 extra kosten.
+
+# Bij een andere keuze dan A, B, C of D krijg je de tekst te zien: “Sorry dat snap ik niet...” en wordt deze stap herhaald
+
+# Als er geen toppings zijn gekozen komt de regel met toppings niet op het bonnetje.
+
+
 def welkom():
     print('Welkom bij Papi Gelato')
 
@@ -33,8 +49,9 @@ def vraagbolletjes():
             print("Zulke grote bakken hebben we niet!")
         else:
             return bolletjes
-            
 
+TotaalBolletjes = 0
+toppingprijs = 0
 hoorntje = 0
 bakje = 0
 def vraagbakje(bolletjes):
@@ -82,21 +99,44 @@ def smaken(bolletjes):
                 else:
                     print("Sorry dat snap ik niet...")
         return smaaken
+
+def topping(bolletjes, hoorntje, bakje):
+    while True:
+        inputTopping = input('Wat voor topping wilt u: A) Geen, B) Slagroom, C) Sprinkels of D) Caramel Saus? ')
+        if inputTopping.lower() == 'a':
+            return 0
+        elif inputTopping.lower() == 'b':
+            return 0.50
+            
+        elif inputTopping.lower() == 'c':
+            return bolletjes * 0.30
+        elif inputTopping.lower() == 'd':
+            if hoorntje >= 1:
+                return hoorntje * 0.60
+            elif bakje >= 1:
+                return bakje * 0.90
+
+        else:
+            print('Sorry ik snap het niet...')
+
+
                
-def bonnetje(bolletjes, hoorntje, bakje):
+def bonnetje(bolletjes, hoorntje, bakje, toppingprijs):
     if bolletjes in range(4,9):
         bakje += 1 
     bolletjesprijs = bolletjes * 1.10 
     hoorentjeprijs = hoorntje * 1.25
     bakjesprijs = bakje * 0.75
-    totaal = bolletjesprijs + hoorentjeprijs + bakjesprijs
+    totaal = float(bolletjesprijs) + float(hoorentjeprijs) + float(bakjesprijs) + float(toppingprijs)
     print('--------------------papi gelato------------------------ \n'
           '                                                        \n'
          f'Bolletjes:     {bolletjes} x €1.10    = €{bolletjesprijs}\n'
          f'Hoorntjes:     {hoorntje} x €1.25     = €{hoorentjeprijs}\n' 
-         f'Bakjes:        {bakje} x €0.75         = €{bakjesprijs}   \n'
-          '                                        --------------- +\n'
-         f'Totaal:                               = €{totaal}          ')                           
+         f'Bakjes:        {bakje} x €0.75        = €{bakjesprijs}   \n')
+    if toppingprijs > 0:
+        print(f'Toppings:                             = €{toppingprijs}  \n')
+    print(f'                                  --------------- +\n'
+    f'Totaal:                               = €{round(totaal,2)}          ')                           
 
 
 
@@ -106,6 +146,8 @@ def sorry():
 
 
 def papi():
+    global TotaalBolletjes
+    global toppingprijs
     process = True
     while process:
         welkom()
@@ -120,14 +162,16 @@ def papi():
 
         if bolletjes <= 0:
             print('Sorry u heeft geen bolletjes besteld')
-            return vraagbolletjes()
-        bonnetje(bolletjes, hoorntje, bakje)
+            process = True
+        toppingprijs = topping(bolletjes, hoorntje, bakje,)
 
-        Doorgaan =resultaat()
+        TotaalBolletjes += bolletjes
+        Doorgaan = resultaat()
         if Doorgaan:
             process = True
         else:
             process = False
+            bonnetje(TotaalBolletjes, hoorntje, bakje, toppingprijs)
             print('Bedankt en tot ziens!')
             return
             
