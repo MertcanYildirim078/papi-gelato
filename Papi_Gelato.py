@@ -38,6 +38,17 @@
 
 # Als er geen toppings zijn gekozen komt de regel met toppings niet op het bonnetje.
 
+# Aan het begin (voor stap 1) word de vraag gesteld: “Bent u 1) particulier of 2) zakelijk?”
+#    A. Als er particulier gekozen wordt dan ga je naar stap 1 (met de bolletjes)
+#    B. Als er zakelijk gekozen wordt:
+
+# is stap 1 anders dan wordt er niet gevraagd hoeveel bolletjes de klant wilt, maar hoeveel liter.
+# Daarna wordt er per liter gevraagd welke smaak de klant wil.
+# Toppings worden niet om gevraagd en ook niet of de klant meer wil bestellen. 
+# De prijs van ijs per liter is voor iedere smaak €9,80 inclusief BTW
+# Op het bonnetje moet bij een zakelijke klant BTW komen onder het totaal 
+
+
 
 def welkom():
     print('Welkom bij Papi Gelato')
@@ -144,13 +155,95 @@ def sorry():
     print('Sorry, dat snap ik niet...')
     return sorry()
 
+ZakelijkDoorgaan = 0
+def zakelijk():
+    global ZakelijkDoorgaan
+    zakelijkprocess = True
+    while zakelijkprocess:
+        zakelijkofpart = int(input('Bent u 1) particulier of 2) zakelijk? '))
+        if zakelijkofpart == 1:
+            ZakelijkDoorgaan = 1
+            break
+        elif zakelijkofpart == 2:
+            ZakelijkDoorgaan = 2
+            hoorntje = 0
+            bakje = 0
+            totaalbakje = 0
+            totaalhoorntje = 0
+            smaakenliter = ''
+            vraagliter = True
+            while vraagliter:
+                liter = int(input('Hoeveel liter wilt u? '))
+                if liter in range(1,9):
+                    break
+                elif liter >8:
+                    print('Zulke grote bakken hebben we niet!')
+                else:
+                    print('Sorry ik snap het niet!')
+
+            for l in range(liter):
+                l += 1
+                smaakliter = input(f'Welke smaak wilt u voor liter nummer {l}? A) Aardbei, C) Chocolade, M) Munt of V) Vanille?: ')
+                if smaakliter.lower() == 'a':
+                    smaakenliter = smaakenliter + f"liter(s) {l}: Aardbei \n"
+                elif smaakliter.lower() == 'c':
+                    smaakenliter = smaakenliter + f"liter(s) {l}: Chocolade \n"
+                elif smaakliter.lower() == 'm':
+                    smaakenliter = smaakenliter + f"liter(s) {l}: Munt \n"
+                elif smaakliter.lower() == 'v':
+                    smaakenliter = smaakenliter + f"liter(s) {l}: Vanille \n"
+                else:
+                    print("Sorry dat snap ik niet...")
+                
+                print(smaakenliter)
+            prijsliter = liter * 9.80
+            Btwprijsliter = prijsliter * 0.09
+            vraaghoorntjesbakjes = True
+            while vraaghoorntjesbakjes:
+                vraaghoorntjebakje = input(f'Wilt u deze {liter} smaken in A) een hoorntje of B) een bakje? ')
+                prijsliter = liter * 9.80
+                Btwprijsliter = prijsliter * 0.09
+                if vraaghoorntjebakje.lower() == 'a':
+                    vraaghoorntjebakje = 1.25
+                    hoorntje += 1
+                    totaalhoorntje = hoorntje * vraaghoorntjebakje
+                    break
+                elif vraaghoorntjebakje.lower() == 'b':
+                    vraaghoorntjebakje = 0.75
+                    bakje += 1
+                    totaalbakje = bakje * vraaghoorntjebakje
+                    break
+                else:
+                    print('Sorry ik snap het niet...')
+            totaalliter = prijsliter + totaalbakje + totaalhoorntje
+            TotaalinclusiefBTW = totaalliter + Btwprijsliter
+            print('--------------------papi gelato------------------------ \n'
+            '                                                        \n'
+            f'liters:     {liter} x €9.80    = €{prijsliter}           \n'
+            f'Hoorntjes:     {hoorntje} x €1.25     = €{totaalhoorntje}\n' 
+            f'Bakjes:        {bakje} x €0.75        = €{totaalbakje}   \n'
+            f'                                  --------------- +\n'
+            f'Totaal:                               = €{round(totaalliter,2)}\n'
+            f'BTW (9%):                             = €{round(Btwprijsliter,2)}\n'
+            f'Totaal inclusief BTW:                   = €{round(TotaalinclusiefBTW,2)}')
+            break
+        else:
+            print('Sorry ik snap het niet...')         
+
+        
+
 
 def papi():
-    global TotaalBolletjes
-    global toppingprijs
+    global ZakelijkDoorgaan
+    TotaalBolletjes = 0
+    toppingprijs = 0
     process = True
     while process:
         welkom()
+        zakelijks = zakelijk()
+        if ZakelijkDoorgaan == 2:
+            print('Bedankt en tot ziens!')
+            break
         bolletjes = vraagbolletjes()
         smaaken = smaken(bolletjes)
         print (smaaken)
